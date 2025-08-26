@@ -1,0 +1,1 @@
+fn(State<AppState>, axum::Json<Vec<Comment>>) -> impl Future<Output = ()> {add_comments}: Handler<_, AppState>

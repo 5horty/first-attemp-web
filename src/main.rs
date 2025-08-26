@@ -8,48 +8,43 @@ use tower_http::services::ServeDir;
 use serde::{Deserialize,Serialize};
 use axum::extract::{State, Json};
 
-
 #[derive(Clone)]
 struct AppState{
-    visitor : Arc<Mutex<Vec<String>>>
+    comments : Arc<Mutex<Vec<Comment>>>
 }
-
 #[derive(Deserialize)]
-struct NewVisitor{
-    name : String   // the way json is coming in to the server
+struct NewComment{
+    name : String,
+    comment : String
 }
 
-#[derive(Serialize)]
-struct VisitorList{
-    visitors : Vec<String>   // the way json is coming in to the server
+#[derive(Serialize,Clone)]
+struct Comment{
+    name : String,
+    comment : String
 }
-
 
 #[tokio::main]
-async fn main() {
+async fn main(){
     let state = AppState{
-        visitor : Arc::new(Mutex::new(Vec::new()))   
+        comments : Arc::new(Mutex::new(Vec::new()))
     };
     let app = Router::new()
-        .route("/api/visitors",get(get_visitors).post(add_visitors))
+        .route("/api/visitors",get(get_comments).post(add_comments))
         .nest_service("/", ServeDir::new("folder"))
         .with_state(state);
 
-    // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:6969").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
-
-async fn get_visitors(State(state): State<AppState>) -> Json<VisitorList>{
-    let visitors = state.visitor.lock().unwrap().clone();
-    Json(VisitorList{visitors})
+async fn get_comments(State(state): State<AppState>) -> Json<Vec<Comment>>{
+    let comment = state.comments.lock().unwrap().clone();
+    Json(comment)
 }
-async fn add_visitors(
-    State(state) : State<AppState>,
-    Json(payload) : Json<NewVisitor>,
-) -> &'static str {
-    let mut visitors = state.visitor.lock().unwrap();
-    visitors.push(payload.name);
-    "Visitor added"
+async fn add_comments(State(state) : State<AppState>, Json(payload): Json<NewComment>){
+    let mut comment = state.comments.lock().unwrap();
+    comment.push(Comment{
+       name: payload.name,
+    comment: payload.comment});
 }

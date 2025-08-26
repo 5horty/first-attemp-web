@@ -1,48 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Visitor Log</title>
+  <meta charset="UTF-8">
+  <title>Comment Box</title>
 </head>
 <body>
-  <h1>Visitor Log</h1>
+  <h1>Visitor Comments</h1>
 
-  <form id="visitor-form">
-    <input type="text" id="name" placeholder="Your name" required />
-    <button type="submit">Sign In</button>
-  </form>
+  <div>
+    <input type="text" id="name" placeholder="Your name">
+    <input type="text" id="comment" placeholder="Your comment">
+    <button id="submitBtn">Add Comment</button>
+  </div>
 
-  <h2>Visitors</h2>
-  <ul id="visitor-list"></ul>
+  <ul id="commentList"></ul>
 
-  <script>
-    async function loadVisitors() {
-      const res = await fetch("/api/visitors");
-      const data = await res.json();
-      const list = document.getElementById("visitor-list");
-      list.innerHTML = "";
-      data.visitors.forEach(v => {
-        const li = document.createElement("li");
-        li.textContent = v;
-        list.appendChild(li);
-      });
-    }
-
-    document.getElementById("visitor-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("name").value;
-      await fetch("/api/visitors", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name })
-      });
-      document.getElementById("name").value = "";
-      loadVisitors();
-    });
-
-    loadVisitors(); // load visitors on page load
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
 
