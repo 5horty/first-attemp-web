@@ -1,0 +1,67 @@
+/* center body and make yellow */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #ffeb3b; /* yellow sides */
+  display: flex;
+  justify-content: center;
+}
+
+/* container in center */
+.container {
+  background-color: #ffcccc; /* light red column */
+  padding: 2rem;
+  margin: 2rem 0;
+  width: 500px;           /* fixed width for column */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+/* Header */
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Form inputs */
+input[type="text"] {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Submit button */
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff6666;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ff4d4d;
+}
+
+/* Comment list */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+
+}
+
+li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+img {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+}

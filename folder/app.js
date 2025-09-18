@@ -6,7 +6,7 @@ const commentList = document.getElementById('commentList');
 
 // Function to load and display comments
 async function loadComments() {
-    const res = await fetch('/api/visitors');
+    const res = await fetch('/api/:)');
     const comments = await res.json();
 
     commentList.innerHTML = ''; // clear current list
