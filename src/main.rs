@@ -4,6 +4,7 @@ use axum::{
     routing::{get, post},
 };
 use serde::{Deserialize, Serialize};
+use std::fs;
 use std::sync::{Arc, Mutex};
 use tower_http::services::ServeDir;
 
@@ -17,7 +18,7 @@ struct NewComment {
     comment: String,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Deserialize)]
 struct Comment {
     name: String,
     comment: String,
@@ -25,8 +26,13 @@ struct Comment {
 
 #[tokio::main]
 async fn main() {
+    let comments = if let Ok(data) = fs::read_to_string("commit.json") {
+        serde_json::from_str(&data).unwrap_or_else(|_| Vec::<Comment>::new())
+    } else {
+        Vec::new()
+    };
     let state = AppState {
-        comments: Arc::new(Mutex::new(Vec::new())),
+        comments: Arc::new(Mutex::new(comments)),
     };
     let app = Router::new()
         .route("/api/:)", get(get_comments).post(add_comments))
@@ -50,4 +56,7 @@ async fn add_comments(State(state): State<AppState>, Json(payload): Json<NewComm
         name: payload.name,
         comment: payload.comment,
     });
+    if let Ok(json) = serde_json::to_string_pretty(&*comment) {
+        let _ = fs::write("commit.json", json);
+    }
 }
